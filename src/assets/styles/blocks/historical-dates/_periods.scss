@@ -1,0 +1,57 @@
+.menu-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  // border: 3px solid $black;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &__burger {
+    width: 50px;
+    height: 6px;
+    border-radius: 5px;
+    // background: $black;
+    transition: all 0.2s ease-in-out;
+  }
+
+  &__burger::before,
+  &__burger::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 6px;
+    border-radius: 5px;
+    // background: $black;
+    transition: all 0.2s ease-in-out;
+  }
+
+  &__burger::before {
+    transform: translateY(-16px);
+  }
+
+  &__burger::after {
+    transform: translateY(16px);
+  }
+
+  &_opened &__burger {
+    background: transparent;
+    transform: translateX(-50px);
+  }
+
+  &_opened &__burger::before {
+    // background: $pink;
+    transform: rotate(45deg) translate(35px, -35px);
+  }
+
+  &_opened &__burger::after {
+    // background: $pink;
+    transform: rotate(-45deg) translate(35px, 35px);
+  }
+
+  &_opened {
+    // border: 3px solid $pink;
+  }
+}

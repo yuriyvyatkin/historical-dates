@@ -1,0 +1,13 @@
+.App {
+  @include regular-font;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 100vh;
+
+  color: $dark-blue;
+  background-color: $gray;
+}

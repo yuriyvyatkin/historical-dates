@@ -1,0 +1,26 @@
+@font-face {
+  font-weight: normal;
+  font-style: normal;
+  font-family: 'PTSans Regular';
+  font-display: swap;
+  src: url('../fonts/PTSans/PTSans-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-weight: bold;
+  font-style: normal;
+  font-family: 'PTSans Bold';
+  font-display: swap;
+  src: url('../fonts/PTSans/PTSans-Bold.ttf') format('truetype');
+}
+
+@mixin regular-font {
+  font-weight: 400;
+  font-size: 20px;
+  font-family: 'PTSans Regular', sans-serif;
+}
+
+@mixin bold-font {
+  font-weight: 700;
+  font-family: 'PTSans Bold', sans-serif;
+}
