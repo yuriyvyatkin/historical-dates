@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import "swiper/css";
+import "swiper/css/pagination";
 import './assets/styles/style.scss';
 import App from './App';
 

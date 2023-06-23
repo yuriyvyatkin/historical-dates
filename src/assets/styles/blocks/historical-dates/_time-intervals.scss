@@ -1,0 +1,144 @@
+.time-intervals {
+  position: relative;
+
+  width: 530px;
+  height: 530px;
+  border: 1px solid $dark-blue;
+  border-radius: 50%;
+
+  text-align: center;
+
+  background-color: $gray;
+}
+
+.time-intervals::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+
+  width: 100%;
+  height: 1px;
+
+  background-color: $dark-blue;
+
+  transform: translateX(-50%);
+}
+
+.time-intervals::after {
+  content: '';
+  position: absolute;
+
+  width: 1px;
+  height: 100%;
+
+  background-color: $dark-blue;
+}
+
+.time-intervals__point {
+  position: absolute;
+  top: -5%;
+  left: -5%;
+
+  width: 110%;
+  height: 110%;
+}
+
+.time-intervals__point .point__number {
+  display: inline-block;
+  vertical-align: middle;
+
+  width: 56px;
+  height: 56px;
+  border: 1px solid $dark-blue;
+  border-radius: 50%;
+
+  line-height: 50px;
+
+  background-color: $white;
+}
+
+.time-intervals__point::after {
+  content: attr(data-label);
+  position: absolute;
+  top: -7%;
+
+  transform: rotate(-30deg);
+}
+
+.point1 {
+  transform: rotate(30deg);
+}
+
+.point1 .point__number {
+  transform: rotate(-30deg);
+}
+
+.point2 {
+  transform: rotate(90deg);
+}
+
+.point2 .point__number {
+  transform: rotate(-90deg);
+}
+
+.point3 {
+  transform: rotate(150deg);
+}
+
+.point3 .point__number {
+  transform: rotate(-150deg);
+}
+
+.point4 {
+  transform: rotate(210deg);
+}
+
+.point4 .point__number {
+  transform: rotate(-210deg);
+}
+
+.point5 {
+  transform: rotate(270deg);
+}
+
+.point5 .point__number {
+  transform: rotate(-270deg);
+}
+
+.point6 {
+  transform: rotate(330deg);
+}
+
+.point6 .point__number {
+  transform: rotate(-330deg);
+}
+
+.time-intervals__interval {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+
+  margin-right: -20px;
+  margin-left: -20px;
+
+  font-size: 12px;
+
+  transform: translateY(-50%);
+}
+
+.interval__start-year {
+  height: 20px;
+
+  line-height: 20px;
+
+  color: $violet-blue;
+}
+
+.interval__final-year {
+  height: 20px;
+
+  line-height: 20px;
+
+  color: $pink;
+}
