@@ -13,7 +13,7 @@
 
     width: 100%;
     height: 100%;
-    border: 1px solid $dark-blue;
+    border: 1px solid rgba($dark-blue, 0.2);
     border-radius: 50%;
 
     transform: translateX(-50%);
@@ -26,7 +26,7 @@
     width: 1px;
     height: 100%;
 
-    background-color: $dark-blue;
+    background-color: rgba($dark-blue, 0.2);
   }
 
   &__interval {
@@ -54,7 +54,7 @@
       width: calc(100% - $leftShift);
       height: 1px;
 
-      background-color: $dark-blue;
+      background-color: rgba($dark-blue, 0.2);
 
       transform: translateX($leftShift);
     }
@@ -87,45 +87,56 @@
     width: 106.6%;
     height: 106.6%;
 
-    &::after {
-      content: attr(data-label);
-      position: absolute;
-      top: -6%;
+    & .point-number {
+      display: inline-block;
+      vertical-align: middle;
 
-      transform: rotate(-30deg);
+      width: 6px;
+      height: 6px;
+      border: 1px solid $dark-blue;
+      border-radius: 50%;
+
+      line-height: 50px;
+
+      background-color: $dark-blue;
+
+      overflow: hidden;
     }
 
-    & .point {
-      cursor: pointer;
+    &_active {
+      top: -5%;
+      left: -5%;
+      z-index: 4;
 
-      &-number {
-        display: inline-block;
-        vertical-align: middle;
+      width: 110%;
+      height: 110%;
 
-        width: 6px;
-        height: 6px;
-        border: 1px solid $dark-blue;
-        border-radius: 50%;
+      pointer-events: none;
 
-        line-height: 50px;
+      &::after {
+        content: attr(data-label);
+        position: absolute;
+        top: -6%;
 
-        background-color: $dark-blue;
+        transform: rotate(-30deg);
       }
 
-      &-number_hovered {
+      & .point-number {
         width: 56px;
         height: 56px;
 
-        background-color: $dark-blue;
+        background-color: $gray;
       }
     }
   }
 
   & .point1 {
     $degree: 30deg;
+
     z-index: 3;
 
     transform: rotate($degree);
+
     & .point-number {
       transform: rotate(-$degree);
     }
@@ -135,6 +146,7 @@
     $degree: 90deg;
 
     transform: rotate($degree);
+
     & .point-number {
       transform: rotate(-$degree);
     }
@@ -144,6 +156,7 @@
     $degree: 150deg;
 
     transform: rotate($degree);
+
     & .point-number {
       transform: rotate(-$degree);
     }
@@ -153,6 +166,7 @@
     $degree: 210deg;
 
     transform: rotate($degree);
+
     & .point-number {
       transform: rotate(-$degree);
     }
@@ -162,6 +176,7 @@
     $degree: 270deg;
 
     transform: rotate($degree);
+
     & .point-number {
       transform: rotate(-$degree);
     }
@@ -171,6 +186,7 @@
     $degree: 330deg;
 
     transform: rotate($degree);
+
     & .point-number {
       transform: rotate(-$degree);
     }
