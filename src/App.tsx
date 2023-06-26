@@ -76,7 +76,7 @@ function App() {
         const chosenPosition = matrixToDegrees(
           window.getComputedStyle(activePointRef.current).transform,
         );
-        const rotationDuration = 2;
+        const rotationDuration = 1;
         let rotationDegrees;
         let pointRotationDirection = 'short';
         let numberRotationDirection;
@@ -127,8 +127,9 @@ function App() {
 
           const newPosition = (position + rotationDegrees) % 360;
 
-          console.log(newPosition);
-
+          gsap.set(point, {
+            zIndex: 2,
+          });
           gsap.to(point, {
             duration: rotationDuration,
             rotate: `${newPosition}_${pointRotationDirection}`,

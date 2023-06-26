@@ -14,7 +14,6 @@ export default function hidePoint( point: HTMLDivElement | string, pointNumber: 
   });
   gsap.set(pointNumber, {
     backgroundColor: '#42567b',
-    cursor: 'auto',
   });
   gsap.to(pointNumber, {
     duration: animationDuration,

@@ -12,54 +12,6 @@
   background-color: $gray;
 }
 
-.circle {
-  position: relative;
-  width: 530px;
-  height: 530px;
-  border-radius: 50%;
-  border: 1px solid $dark-blue;
-  opacity: 0.2;
-}
-
-.bullet {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background-color: #000;
-  border-radius: 50%;
-}
-
-.bullet:nth-child(1) {
-  top: 3%;
-  left: 70%;
-}
-
-.bullet:nth-child(2) {
-  top: 25%;
-  left: 95%;
-}
-
-.bullet:nth-child(3) {
-  top: 75%;
-  left: 95%;
-}
-
-.bullet:nth-child(4) {
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.bullet:nth-child(5) {
-  top: 75%;
-  left: 5%;
-}
-
-.bullet:nth-child(6) {
-  top: 25%;
-  left: 5%;
-}
-
 .swiper-slide {
   text-align: center;
   font-size: 18px;
