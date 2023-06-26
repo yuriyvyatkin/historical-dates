@@ -9,6 +9,7 @@ const animationDuration = 0.2;
 function App() {
   const activePointNumberRef = useRef<HTMLElement | null>(null);
   const activePointRef = useRef<HTMLElement | null>(null);
+  const timeIntervalsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     function handleMouseMove(e: MouseEvent) {
@@ -44,16 +45,33 @@ function App() {
       }
     }
 
-    function handleClick(e: MouseEvent) {
+    function handleClick() {
       if (activePointNumberRef.current !== null && activePointRef.current !== null) {
-        const position = matrixToDegrees(window.getComputedStyle(activePointRef.current).transform);
-        const newPointPosition = `rotate(${position + 60}deg)`;
-        const newPointNumberPosition = `rotate(-${position + 60}deg)`;
+        const chosenPosition = matrixToDegrees(window.getComputedStyle(activePointRef.current).transform);
+        let rotation;
 
-        // console.log(position);
+        if (chosenPosition < 180) {
+          rotation = 30 - chosenPosition;
+        } else {
+          rotation = 390 - chosenPosition;
+        }
 
-        activePointRef.current.style.transform = newPointPosition;
-        activePointNumberRef.current.style.transform = newPointNumberPosition;
+        const children = timeIntervalsRef.current?.children as HTMLCollection;
+
+        children[1].classList.remove('time-intervals__point_active', 'time-intervals__point_signed');
+
+        for (let i = 1; i < children.length; i++) {
+          const point = children[i] as HTMLElement;
+          const pointNumber = point.firstElementChild as HTMLElement;
+          const position = matrixToDegrees(window.getComputedStyle(point).transform);
+          const newPointPosition = `rotate(${position + rotation}deg)`;
+          const newPointNumberPosition = `rotate(${-(position + rotation)}deg)`;
+          point.style.transform = newPointPosition;
+          pointNumber.style.transform = newPointNumberPosition;
+        }
+
+        // activePointRef.current.style.transform = newPointPosition;
+        // activePointNumberRef.current.style.transform = newPointNumberPosition;
 
         // gsap.to('.time-intervals__point', {
         //   duration: animationDuration,
@@ -75,14 +93,14 @@ function App() {
   return (
     <>
       <div className="App">
-        <div className="time-intervals">
+        <div className="time-intervals" ref={timeIntervalsRef}>
           <div className="time-intervals__interval">
             <span className="interval__start-year">2015</span>
             &nbsp;&nbsp;
             <span className="interval__final-year">2022</span>
           </div>
           <div
-            className="time-intervals__point time-intervals__point_active point1"
+            className="time-intervals__point time-intervals__point_active time-intervals__point_signed point1"
             data-label="Литература"
           >
             <span className="point-number">1</span>
@@ -90,9 +108,9 @@ function App() {
           <div className="time-intervals__point point2">
             <span className="point-number">2</span>
           </div>
-          {/* <div className="time-intervals__point point3">
+          <div className="time-intervals__point point3">
             <span className="point-number">3</span>
-          </div> */}
+          </div>
           <div className="time-intervals__point point4">
             <span className="point-number">4</span>
           </div>

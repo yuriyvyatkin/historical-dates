@@ -113,20 +113,20 @@
 
       pointer-events: none;
 
-      &::after {
-        content: attr(data-label);
-        position: absolute;
-        top: -6%;
-
-        transform: rotate(-30deg);
-      }
-
       & .point-number {
         width: 56px;
         height: 56px;
 
         background-color: $gray;
       }
+    }
+
+    &_signed::after {
+      content: attr(data-label);
+      position: absolute;
+      top: -6%;
+
+      transform: rotate(-30deg);
     }
   }
 
