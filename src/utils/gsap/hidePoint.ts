@@ -1,22 +1,22 @@
 import gsap from "gsap";
 
-export default function hidePoint( activePoint: HTMLElement | string, activePointNumber: HTMLElement | string, animationDuration: number) {
-  gsap.set(activePoint, {
-    clearProps: "cursor",
+export default function hidePoint( point: HTMLDivElement | string, pointNumber: HTMLElement | string, animationDuration: number) {
+  gsap.set(point, {
+    zIndex: 2,
   });
-  gsap.to(activePoint, {
+  gsap.to(point, {
     duration: animationDuration,
     top: '-3.3%',
     left: '-3.3%',
     width: '106.6%',
     height: '106.6%',
-    clearProps: "zIndex",
     ease: "power1.in"
   });
-  gsap.set(activePointNumber, {
-    clearProps: "backgroundColor",
+  gsap.set(pointNumber, {
+    backgroundColor: '#42567b',
+    cursor: 'auto',
   });
-  gsap.to(activePointNumber, {
+  gsap.to(pointNumber, {
     duration: animationDuration,
     width: 6,
     height: 6,

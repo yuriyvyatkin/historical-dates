@@ -1,17 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Ref } from 'react';
 import MySwiper from './MySwiper';
-import gsap from "gsap";
+import gsap from 'gsap';
 import showPoint from './utils/gsap/showPoint';
 import hidePoint from './utils/gsap/hidePoint';
-import matrixToDegrees from "./utils/matrixToDegrees";
-const animationDuration = 0.2;
+import matrixToDegrees from './utils/matrixToDegrees';
+const pointAnimationDuration = 0.2;
 
 function App() {
-  const activePointNumberRef = useRef<HTMLElement | null>(null);
-  const activePointRef = useRef<HTMLElement | null>(null);
   const timeIntervalsRef = useRef<HTMLDivElement | null>(null);
+  const activePointNumberRef = useRef<HTMLElement | null>(null);
+  const activePointRef = useRef<HTMLDivElement | null>(null);
+  const prevPointNumberRef = useRef<HTMLElement | null>(null);
+  const prevPointRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    showPoint(
+      prevPointRef.current as HTMLDivElement,
+      prevPointNumberRef.current as HTMLElement,
+    );
+    gsap.set(`.point${prevPointNumberRef.current?.innerText} .point-label`, {
+      opacity: 1,
+    });
+
     function handleMouseMove(e: MouseEvent) {
       const overlapped = document.elementsFromPoint(e.pageX, e.pageY);
 
@@ -19,14 +29,22 @@ function App() {
         el.classList.contains('point-number'),
       );
 
-      if (included && activePointNumberRef.current === null) {
+      if (included === prevPointNumberRef.current) {
+        return;
+      }
+
+      if (
+        included &&
+        activePointNumberRef.current === null &&
+        activePointRef.current === null
+      ) {
         activePointNumberRef.current = included as HTMLElement;
         activePointRef.current = activePointNumberRef.current
-          ?.offsetParent as HTMLElement;
+          ?.offsetParent as HTMLDivElement;
         showPoint(
           activePointRef.current,
           activePointNumberRef.current,
-          animationDuration,
+          pointAnimationDuration,
         );
       }
 
@@ -38,7 +56,7 @@ function App() {
         hidePoint(
           activePointRef.current,
           activePointNumberRef.current,
-          animationDuration,
+          pointAnimationDuration,
         );
         activePointRef.current = null;
         activePointNumberRef.current = null;
@@ -46,47 +64,112 @@ function App() {
     }
 
     function handleClick() {
-      if (activePointNumberRef.current !== null && activePointRef.current !== null) {
-        const chosenPosition = matrixToDegrees(window.getComputedStyle(activePointRef.current).transform);
-        let rotation;
+      if (
+        activePointNumberRef.current !== null &&
+        activePointRef.current !== null
+      ) {
+        timeIntervalsRef.current?.removeEventListener(
+          'mousemove',
+          handleMouseMove,
+        );
+
+        const chosenPosition = matrixToDegrees(
+          window.getComputedStyle(activePointRef.current).transform,
+        );
+        const rotationDuration = 2;
+        let rotationDegrees;
+        let pointRotationDirection;
+        let numberRotationDirection;
 
         if (chosenPosition < 180) {
-          rotation = 30 - chosenPosition;
+          rotationDegrees = 30 - chosenPosition;
+          pointRotationDirection = 'ccw';
+          numberRotationDirection = 'cw';
         } else {
-          rotation = 390 - chosenPosition;
+          rotationDegrees = 390 - chosenPosition;
+          pointRotationDirection = 'cw';
+          numberRotationDirection = 'ccw';
         }
+
+        gsap.set(activePointNumberRef.current, {
+          cursor: 'auto',
+        });
 
         const children = timeIntervalsRef.current?.children as HTMLCollection;
 
-        children[1].classList.remove('time-intervals__point_active', 'time-intervals__point_signed');
-
-        for (let i = 1; i < children.length; i++) {
-          const point = children[i] as HTMLElement;
-          const pointNumber = point.firstElementChild as HTMLElement;
-          const position = matrixToDegrees(window.getComputedStyle(point).transform);
-          const newPointPosition = `rotate(${position + rotation}deg)`;
-          const newPointNumberPosition = `rotate(${-(position + rotation)}deg)`;
-          point.style.transform = newPointPosition;
-          pointNumber.style.transform = newPointNumberPosition;
+        if (prevPointRef.current && prevPointNumberRef.current) {
+          hidePoint(
+            prevPointRef.current,
+            prevPointNumberRef.current,
+            pointAnimationDuration,
+          );
+          gsap.set(
+            `.point${prevPointNumberRef.current.innerText} .point-label`,
+            {
+              opacity: 0,
+            },
+          );
         }
 
-        // activePointRef.current.style.transform = newPointPosition;
-        // activePointNumberRef.current.style.transform = newPointNumberPosition;
+        prevPointNumberRef.current = activePointNumberRef.current;
+        prevPointRef.current = activePointRef.current;
+        activePointRef.current = null;
+        activePointNumberRef.current = null;
 
-        // gsap.to('.time-intervals__point', {
-        //   duration: animationDuration,
-        //   rotate: 60,
-        //   ease: "power1.out"
-        // });
+        for (let i = 1; i < children.length; i++) {
+          const point = children[i] as HTMLDivElement;
+          const pointNumber = point.firstElementChild as HTMLElement;
+          const position = matrixToDegrees(
+            window.getComputedStyle(point).transform,
+          );
+
+          const newPosition = (position + rotationDegrees) % 360;
+
+          console.log(newPosition);
+
+          gsap.to(point, {
+            duration: rotationDuration,
+            rotate: `${newPosition}_${pointRotationDirection}`,
+            ease: 'power1.out',
+          });
+          gsap.to(pointNumber, {
+            duration: rotationDuration,
+            rotate: `${-newPosition}_${numberRotationDirection}`,
+            pointerEvents: 'none',
+          });
+        }
+
+        gsap.set('.point-number', {
+          delay: rotationDuration,
+          clearProps: 'pointerEvents',
+        });
+
+        setTimeout(() => {
+          gsap.to(
+            `.point${prevPointNumberRef.current?.innerText} .point-label`,
+            {
+              duration: 0.5,
+              opacity: 1,
+              ease: 'power1.out',
+            },
+          );
+          timeIntervalsRef.current?.addEventListener(
+            'mousemove',
+            handleMouseMove,
+          );
+        }, (rotationDuration * 1000) + 50);
       }
     }
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('click', handleClick);
+    timeIntervalsRef.current?.addEventListener('mousemove', handleMouseMove);
+    timeIntervalsRef.current?.addEventListener('click', handleClick);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('click', handleClick);
+      timeIntervalsRef.current?.removeEventListener(
+        'mousemove',
+        handleMouseMove,
+      );
+      timeIntervalsRef.current?.removeEventListener('click', handleClick);
     };
   }, []);
 
@@ -99,26 +182,31 @@ function App() {
             &nbsp;&nbsp;
             <span className="interval__final-year">2022</span>
           </div>
-          <div
-            className="time-intervals__point time-intervals__point_active time-intervals__point_signed point1"
-            data-label="Литература"
-          >
-            <span className="point-number">1</span>
+          <div className="time-intervals__point point1" ref={prevPointRef}>
+            <span className="point-number" ref={prevPointNumberRef}>
+              1
+            </span>
+            <span className="point-label">Литература</span>
           </div>
           <div className="time-intervals__point point2">
             <span className="point-number">2</span>
+            <span className="point-label">Литература</span>
           </div>
           <div className="time-intervals__point point3">
             <span className="point-number">3</span>
+            <span className="point-label">Литература</span>
           </div>
           <div className="time-intervals__point point4">
             <span className="point-number">4</span>
+            <span className="point-label">Литература</span>
           </div>
           <div className="time-intervals__point point5">
             <span className="point-number">5</span>
+            <span className="point-label">Литература</span>
           </div>
           <div className="time-intervals__point point6">
             <span className="point-number">6</span>
+            <span className="point-label">Литература</span>
           </div>
         </div>
 

@@ -103,37 +103,18 @@
       overflow: hidden;
     }
 
-    &_active {
-      top: -5%;
-      left: -5%;
-      z-index: 4;
-
-      width: 110%;
-      height: 110%;
-
-      pointer-events: none;
-
-      & .point-number {
-        width: 56px;
-        height: 56px;
-
-        background-color: $gray;
-      }
-    }
-
-    &_signed::after {
-      content: attr(data-label);
+    & .point-label {
       position: absolute;
       top: -6%;
 
       transform: rotate(-30deg);
+
+      opacity: 0;
     }
   }
 
   & .point1 {
     $degree: 30deg;
-
-    z-index: 3;
 
     transform: rotate($degree);
 
