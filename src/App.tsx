@@ -78,17 +78,19 @@ function App() {
         );
         const rotationDuration = 2;
         let rotationDegrees;
-        let pointRotationDirection;
+        let pointRotationDirection = 'short';
         let numberRotationDirection;
 
         if (chosenPosition < 180) {
           rotationDegrees = 30 - chosenPosition;
-          pointRotationDirection = 'ccw';
           numberRotationDirection = 'cw';
         } else {
           rotationDegrees = 390 - chosenPosition;
-          pointRotationDirection = 'cw';
           numberRotationDirection = 'ccw';
+        }
+
+        if (chosenPosition === 210) {
+          pointRotationDirection = 'cw';
         }
 
         gsap.set(activePointNumberRef.current, {
@@ -148,7 +150,7 @@ function App() {
           gsap.to(
             `.point${prevPointNumberRef.current?.innerText} .point-label`,
             {
-              duration: 0.5,
+              duration: 0.3,
               opacity: 1,
               ease: 'power1.out',
             },
@@ -157,7 +159,7 @@ function App() {
             'mousemove',
             handleMouseMove,
           );
-        }, (rotationDuration * 1000) + 50);
+        }, rotationDuration * 1000);
       }
     }
 
