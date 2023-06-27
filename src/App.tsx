@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef, Ref } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MySwiper from './MySwiper';
 import gsap from 'gsap';
 import showPoint from './utils/gsap/showPoint';
 import hidePoint from './utils/gsap/hidePoint';
+import rotatePoints from "./utils/gsap/rotatePoints";
 import matrixToDegrees from './utils/matrixToDegrees';
-const pointAnimationDuration = 0.2;
+import findPointNumber from './utils/findPointNumber';
 
 function App() {
   const timeIntervalsRef = useRef<HTMLDivElement | null>(null);
@@ -14,20 +15,16 @@ function App() {
   const prevPointRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    showPoint(
-      prevPointRef.current as HTMLDivElement,
-      prevPointNumberRef.current as HTMLElement,
-    );
+    showPoint({
+      point: prevPointRef.current as HTMLDivElement,
+      pointNumber: prevPointNumberRef.current as HTMLElement,
+    });
     gsap.set(`.point${prevPointNumberRef.current?.innerText} .point-label`, {
       opacity: 1,
     });
 
     function handleMouseMove(e: MouseEvent) {
-      const overlapped = document.elementsFromPoint(e.pageX, e.pageY);
-
-      const included = overlapped.find((el) =>
-        el.classList.contains('point-number'),
-      );
+      const included = findPointNumber(e);
 
       if (included === prevPointNumberRef.current) {
         return;
@@ -41,11 +38,10 @@ function App() {
         activePointNumberRef.current = included as HTMLElement;
         activePointRef.current = activePointNumberRef.current
           ?.offsetParent as HTMLDivElement;
-        showPoint(
-          activePointRef.current,
-          activePointNumberRef.current,
-          pointAnimationDuration,
-        );
+        showPoint({
+          point: activePointRef.current,
+          pointNumber: activePointNumberRef.current,
+        });
       }
 
       if (
@@ -53,11 +49,10 @@ function App() {
         activePointNumberRef.current !== null &&
         activePointRef.current !== null
       ) {
-        hidePoint(
-          activePointRef.current,
-          activePointNumberRef.current,
-          pointAnimationDuration,
-        );
+        hidePoint({
+          point: activePointRef.current,
+          pointNumber: activePointNumberRef.current,
+        });
         activePointRef.current = null;
         activePointNumberRef.current = null;
       }
@@ -77,75 +72,20 @@ function App() {
           window.getComputedStyle(activePointRef.current).transform,
         );
         const rotationDuration = 1;
-        let rotationDegrees;
-        let pointRotationDirection = 'short';
-        let numberRotationDirection;
 
-        if (chosenPosition < 180) {
-          rotationDegrees = 30 - chosenPosition;
-          numberRotationDirection = 'cw';
-        } else {
-          rotationDegrees = 390 - chosenPosition;
-          numberRotationDirection = 'ccw';
-        }
-
-        if (chosenPosition === 210) {
-          pointRotationDirection = 'cw';
-        }
-
-        gsap.set(activePointNumberRef.current, {
-          cursor: 'auto',
+        rotatePoints({
+          chosenPosition: chosenPosition,
+          activePointNumber: activePointNumberRef.current,
+          prevPoint: prevPointRef.current as HTMLDivElement,
+          prevPointNumber: prevPointNumberRef.current as HTMLElement,
+          pointsParent: timeIntervalsRef.current?.children as HTMLCollection,
+          duration: rotationDuration,
         });
-
-        const children = timeIntervalsRef.current?.children as HTMLCollection;
-
-        if (prevPointRef.current && prevPointNumberRef.current) {
-          hidePoint(
-            prevPointRef.current,
-            prevPointNumberRef.current,
-            pointAnimationDuration,
-          );
-          gsap.set(
-            `.point${prevPointNumberRef.current.innerText} .point-label`,
-            {
-              opacity: 0,
-            },
-          );
-        }
 
         prevPointNumberRef.current = activePointNumberRef.current;
         prevPointRef.current = activePointRef.current;
         activePointRef.current = null;
         activePointNumberRef.current = null;
-
-        for (let i = 1; i < children.length; i++) {
-          const point = children[i] as HTMLDivElement;
-          const pointNumber = point.firstElementChild as HTMLElement;
-          const position = matrixToDegrees(
-            window.getComputedStyle(point).transform,
-          );
-
-          const newPosition = (position + rotationDegrees) % 360;
-
-          gsap.set(point, {
-            zIndex: 2,
-          });
-          gsap.to(point, {
-            duration: rotationDuration,
-            rotate: `${newPosition}_${pointRotationDirection}`,
-            ease: 'power1.out',
-          });
-          gsap.to(pointNumber, {
-            duration: rotationDuration,
-            rotate: `${-newPosition}_${numberRotationDirection}`,
-            pointerEvents: 'none',
-          });
-        }
-
-        gsap.set('.point-number', {
-          delay: rotationDuration,
-          clearProps: 'pointerEvents',
-        });
 
         setTimeout(() => {
           gsap.to(

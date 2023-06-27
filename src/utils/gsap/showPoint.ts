@@ -1,12 +1,20 @@
 import gsap from "gsap";
 
-export default function showPoint( point: HTMLDivElement | string, pointNumber: HTMLElement | string, animationDuration?: number) {
-  if (animationDuration) {
+export default function showPoint({
+  point,
+  pointNumber,
+  duration = 0.2,
+}: {
+  point: HTMLDivElement | string;
+  pointNumber: HTMLElement | string;
+  duration?: number;
+}) {
+  if (duration) {
     gsap.set(point, {
       zIndex: 3,
     });
     gsap.to(point, {
-      duration: animationDuration,
+      duration: duration,
       top: '-5%',
       left: '-5%',
       width: '110%',
@@ -18,7 +26,7 @@ export default function showPoint( point: HTMLDivElement | string, pointNumber: 
       cursor: 'pointer',
     });
     gsap.to(pointNumber, {
-      duration: animationDuration,
+      duration: duration,
       width: 56,
       height: 56,
       ease: "power1.out"
