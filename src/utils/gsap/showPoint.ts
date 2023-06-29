@@ -4,14 +4,16 @@ export default function showPoint({
   point,
   pointNumber,
   duration = 0.2,
+  animate = true,
 }: {
   point: HTMLDivElement | string;
   pointNumber: HTMLElement | string;
   duration?: number;
+  animate?: boolean;
 }) {
-  if (duration) {
+  if (animate) {
     gsap.set(point, {
-      zIndex: 3,
+      // zIndex: 3,
     });
     gsap.to(point, {
       duration: duration,
@@ -41,7 +43,6 @@ export default function showPoint({
     });
     gsap.set(pointNumber, {
       backgroundColor: '#f5f6fa',
-      cursor: 'auto',
       width: 56,
       height: 56,
     });

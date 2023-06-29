@@ -1,76 +1,128 @@
 import React, { useState, useEffect, useRef } from 'react';
-import MySwiper from './MySwiper';
-import gsap from 'gsap';
 import showPoint from './utils/gsap/showPoint';
 import hidePoint from './utils/gsap/hidePoint';
-import rotatePoints from "./utils/gsap/rotatePoints";
+import showPointLabel from './utils/gsap/showPointLabel';
+import changePointZPosition from './utils/gsap/changePointZPosition';
+import rotatePoints from './utils/gsap/rotatePoints';
 import matrixToDegrees from './utils/matrixToDegrees';
-import findPointNumber from './utils/findPointNumber';
+import getNearestPointIndex from './utils/getNearestPointIndex';
+import getActualPointIndex from './utils/getActualPointIndex';
 
 function App() {
-  const timeIntervalsRef = useRef<HTMLDivElement | null>(null);
+  // задаём рефы для основных элементов
+  const ancestorRef = useRef<HTMLDivElement | null>(null);
   const activePointNumberRef = useRef<HTMLElement | null>(null);
   const activePointRef = useRef<HTMLDivElement | null>(null);
   const prevPointNumberRef = useRef<HTMLElement | null>(null);
   const prevPointRef = useRef<HTMLDivElement | null>(null);
+  const pointsQuantity = 6;
 
   useEffect(() => {
+    // показываем первый пойнт при первой загрузке компонента
     showPoint({
       point: prevPointRef.current as HTMLDivElement,
       pointNumber: prevPointNumberRef.current as HTMLElement,
+      animate: false,
     });
-    gsap.set(`.point${prevPointNumberRef.current?.innerText} .point-label`, {
-      opacity: 1,
+    showPointLabel({
+      label: prevPointRef.current?.querySelector('.point-label') as HTMLElement,
+      animate: false,
     });
 
-    function handleMouseMove(e: MouseEvent) {
-      const included = findPointNumber(e);
+    // находим центр окружности
+    const circle = ancestorRef.current as HTMLElement;
+    const circleX =
+      circle?.getBoundingClientRect().left + circle.offsetWidth / 2;
+    const circleY =
+      circle?.getBoundingClientRect().top +
+      circle.offsetHeight / 2 +
+      window.scrollY;
 
-      if (included === prevPointNumberRef.current) {
+    function handleMouseMove(
+      e: MouseEvent,
+      {
+        circleX,
+        circleY,
+        pointsQuantity,
+      }: { circleX: number; circleY: number; pointsQuantity: number },
+    ) {
+      const currentElement = e.target as HTMLElement;
+
+      const isPointNumber = currentElement.classList.contains('point-number');
+
+      // если найден номер пойнта и он не является последним выбранным или активным, то показываем его и записываем
+      if (isPointNumber) {
+        if (
+          currentElement !== prevPointNumberRef.current &&
+          currentElement !== activePointNumberRef.current
+        ) {
+          activePointNumberRef.current = currentElement as HTMLElement;
+          showPoint({
+            point: activePointRef.current as HTMLDivElement,
+            pointNumber: activePointNumberRef.current,
+          });
+        }
+
         return;
       }
 
-      if (
-        included &&
-        activePointNumberRef.current === null &&
-        activePointRef.current === null
-      ) {
-        activePointNumberRef.current = included as HTMLElement;
-        activePointRef.current = activePointNumberRef.current
-          ?.offsetParent as HTMLDivElement;
-        showPoint({
+      // иначе опускаем предыдущий пойнт вниз по оси Z
+      if (activePointRef.current) {
+        changePointZPosition({
           point: activePointRef.current,
-          pointNumber: activePointNumberRef.current,
+          direction: 'down',
         });
       }
 
-      if (
-        !included &&
-        activePointNumberRef.current !== null &&
-        activePointRef.current !== null
-      ) {
+      activePointRef.current = null;
+
+      // находим ближайший пойнт и поднимаем его вверх по оси Z, чтобы получить его номер через e.target в будущем
+      const firstPointNumber = Number(prevPointNumberRef.current?.innerText);
+
+      const nearestPointIndex = getNearestPointIndex({
+        ax: circleX,
+        ay: circleY,
+        bx: e.pageX,
+        by: e.pageY,
+      });
+
+      const actualNearestPointIndex = getActualPointIndex({
+        index: nearestPointIndex,
+        pointsQuantity: pointsQuantity,
+        firstPointNumber: firstPointNumber,
+      });
+
+      const actualPoint = ancestorRef.current?.querySelector(
+        `.point${actualNearestPointIndex}`,
+      ) as HTMLDivElement;
+
+      changePointZPosition({ point: actualPoint, direction: 'up' });
+
+      activePointRef.current = actualPoint;
+
+      // если есть активный пойнт, то прячем его
+      if (activePointNumberRef.current !== null) {
         hidePoint({
-          point: activePointRef.current,
+          point: activePointRef.current as HTMLDivElement,
           pointNumber: activePointNumberRef.current,
         });
-        activePointRef.current = null;
         activePointNumberRef.current = null;
       }
     }
 
-    function handleClick() {
+    function handleClick(mouseMoveHandler: (e: MouseEvent) => void) {
       if (
         activePointNumberRef.current !== null &&
         activePointRef.current !== null
       ) {
-        timeIntervalsRef.current?.removeEventListener(
-          'mousemove',
-          handleMouseMove,
-        );
+        ancestorRef.current?.removeEventListener('mousemove', mouseMoveHandler);
 
         const chosenPosition = matrixToDegrees(
           window.getComputedStyle(activePointRef.current).transform,
         );
+        const points = ancestorRef.current?.querySelectorAll(
+          '.time-intervals__point',
+        ) as NodeListOf<Element>;
         const rotationDuration = 1;
 
         rotatePoints({
@@ -78,7 +130,8 @@ function App() {
           activePointNumber: activePointNumberRef.current,
           prevPoint: prevPointRef.current as HTMLDivElement,
           prevPointNumber: prevPointNumberRef.current as HTMLElement,
-          pointsParent: timeIntervalsRef.current?.children as HTMLCollection,
+          points: points,
+          pointsQuantity: points.length,
           duration: rotationDuration,
         });
 
@@ -88,38 +141,42 @@ function App() {
         activePointNumberRef.current = null;
 
         setTimeout(() => {
-          gsap.to(
-            `.point${prevPointNumberRef.current?.innerText} .point-label`,
-            {
-              duration: 0.3,
-              opacity: 1,
-              ease: 'power1.out',
-            },
-          );
-          timeIntervalsRef.current?.addEventListener(
-            'mousemove',
-            handleMouseMove,
+          const activePointLabel = prevPointRef.current?.querySelector(
+            '.point-label',
+          ) as HTMLElement;
+
+          showPointLabel({
+            label: activePointLabel,
+          });
+
+          ancestorRef.current?.addEventListener('mousemove', (e) =>
+            handleMouseMove(e, { circleX, circleY, pointsQuantity }),
           );
         }, rotationDuration * 1000);
       }
     }
 
-    timeIntervalsRef.current?.addEventListener('mousemove', handleMouseMove);
-    timeIntervalsRef.current?.addEventListener('click', handleClick);
+    ancestorRef.current?.addEventListener('mousemove', (e) =>
+      handleMouseMove(e, { circleX, circleY, pointsQuantity }),
+    );
+    ancestorRef.current?.addEventListener('click', () =>
+      handleClick(handleMouseMove as (e: MouseEvent) => void),
+    );
 
     return () => {
-      timeIntervalsRef.current?.removeEventListener(
-        'mousemove',
-        handleMouseMove,
+      ancestorRef.current?.removeEventListener('mousemove', (e) =>
+        handleMouseMove(e, { circleX, circleY, pointsQuantity }),
       );
-      timeIntervalsRef.current?.removeEventListener('click', handleClick);
+      ancestorRef.current?.removeEventListener('click', () =>
+        handleClick(handleMouseMove as (e: MouseEvent) => void),
+      );
     };
   }, []);
 
   return (
     <>
       <div className="App">
-        <div className="time-intervals" ref={timeIntervalsRef}>
+        <div className="time-intervals" ref={ancestorRef}>
           <div className="time-intervals__interval">
             <span className="interval__start-year">2015</span>
             &nbsp;&nbsp;
@@ -152,8 +209,6 @@ function App() {
             <span className="point-label">Литература</span>
           </div>
         </div>
-
-        {/* <MySwiper /> */}
       </div>
     </>
   );
