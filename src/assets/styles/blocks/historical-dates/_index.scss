@@ -1,2 +1,17 @@
 @import 'time-intervals';
 @import 'events';
+
+.historical-dates {
+  @include pt-sans-regular-font;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: hidden;
+
+  min-height: 100vh;
+
+  color: $dark-blue;
+  background-color: $gray;
+}

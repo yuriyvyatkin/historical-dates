@@ -4,6 +4,9 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
   entry: './src/index.tsx',
   output: {
