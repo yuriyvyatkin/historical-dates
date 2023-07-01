@@ -7,6 +7,8 @@ import rotatePoints from '@/utils/gsap/rotatePoints';
 import matrixToDegrees from '@/utils/matrixToDegrees';
 import getNearestPointIndex from '@/utils/getNearestPointIndex';
 import getActualPointIndex from '@/utils/getActualPointIndex';
+import YearsInterval from "./YearsInterval";
+import Point from "./Point";
 
 function TimeIntervals() {
   // задаём рефы для основных элементов
@@ -176,37 +178,13 @@ function TimeIntervals() {
   return (
     <>
       <div className="time-intervals" ref={ancestorRef}>
-        <div className="time-intervals__interval">
-          <span className="interval__start-year">2015</span>
-          &nbsp;&nbsp;
-          <span className="interval__final-year">2022</span>
-        </div>
-        <div className="time-intervals__point point1" ref={prevPointRef}>
-          <span className="point-number" ref={prevPointNumberRef}>
-            1
-          </span>
-          <span className="point-label">Литература</span>
-        </div>
-        <div className="time-intervals__point point2">
-          <span className="point-number">2</span>
-          <span className="point-label">Литература</span>
-        </div>
-        <div className="time-intervals__point point3">
-          <span className="point-number">3</span>
-          <span className="point-label">Литература</span>
-        </div>
-        <div className="time-intervals__point point4">
-          <span className="point-number">4</span>
-          <span className="point-label">Литература</span>
-        </div>
-        <div className="time-intervals__point point5">
-          <span className="point-number">5</span>
-          <span className="point-label">Литература</span>
-        </div>
-        <div className="time-intervals__point point6">
-          <span className="point-number">6</span>
-          <span className="point-label">Литература</span>
-        </div>
+        <YearsInterval startYear={2015} lastYear={2022} />
+        <Point index={1} label={'Литература'} prevPointRef={prevPointRef} prevPointNumberRef={prevPointNumberRef} />
+        <Point index={2} label={'Литература'} />
+        <Point index={3} label={'Литература'} />
+        <Point index={4} label={'Литература'} />
+        <Point index={5} label={'Литература'} />
+        <Point index={6} label={'Литература'} />
       </div>
     </>
   );

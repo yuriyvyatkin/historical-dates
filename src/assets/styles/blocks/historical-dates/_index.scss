@@ -4,14 +4,118 @@
 .historical-dates {
   @include pt-sans-regular-font;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow-y: hidden;
+  overflow: hidden;
 
+  max-width: 1440px;
   min-height: 100vh;
+  margin-right: auto;
+  margin-left: auto;
+  border-right: 1px solid rgba($dark-blue, .1);
+  border-left: 1px solid rgba($dark-blue, .1);
 
   color: $dark-blue;
   background-color: $gray;
+
+  &::before {
+    content: '';
+    position: absolute;
+
+    width: 100%;
+    max-width: inherit;
+    height: 2px;
+
+    background-color: rgba($dark-blue, .1);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+
+    width: 2px;
+    height: 100%;
+
+    background-color: rgba($dark-blue, .1);
+  }
+
+  &__title {
+    @include pt-sans-bold-font;
+
+    position: absolute;
+    top: 15%;
+    left: 0;
+
+    padding-left: 80px;
+
+    font-size: 56px;
+    line-height: 120%;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 3px;
+      height: 100%;
+
+      background: linear-gradient(180deg, #3877ee, #ef5da8);
+    }
+  }
+
+  &__bottom-controls-wrapper {
+    position: absolute;
+    bottom: 20%;
+    left: 80px;
+    display: flex;
+    flex-direction: column;
+
+    & > *:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.arrow-controls {
+  display: flex;
+
+  &__arrow-left {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+    border: 1px solid $dark-blue;
+    border-radius: 50%;
+
+    background-image: url('@/assets/svg/arrow.svg');
+    background-repeat: no-repeat;
+    background-position: 50%;
+
+    cursor: pointer;
+  }
+
+  &__arrow-right {
+    width: 50px;
+    height: 50px;
+    border: 1px solid $dark-blue;
+    border-radius: 50%;
+
+    background-image: url('@/assets/svg/arrow.svg');
+    background-repeat: no-repeat;
+    background-position: 50%;
+
+    transform: rotate(180deg);
+
+    cursor: pointer;
+  }
+
+  &__arrow-left_disabled,
+  &__arrow-right_disabled {
+    opacity: .5;
+
+    cursor: not-allowed;
+  }
 }
