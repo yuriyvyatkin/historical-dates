@@ -4,17 +4,25 @@ export interface DetailsItem {
 }
 
 export interface DataItem {
-  id: number;
-  category?: string;
-  yearsInterval: number[];
+  id: string;
+  index: number;
+  label?: string;
+  yearsInterval: {
+    start: number;
+    last: number;
+  };
   details: DetailsItem[];
 }
 
 export const data = [
   {
-    id: 1,
-    category: 'технологии',
-    yearsInterval: [1980, 1986],
+    id: '552cd02e-9c13-4bdb-99f1-f9009f0f553b',
+    index: 1,
+    label: 'технологии',
+    yearsInterval: {
+      start: 1980,
+      last: 1986,
+    },
     details: [
       {
         year: 1980,
@@ -39,9 +47,13 @@ export const data = [
     ],
   },
   {
-    id: 2,
-    category: 'кино',
-    yearsInterval: [1987, 1991],
+    id: '3382e8dd-50bd-43ce-9117-a5e046ed756e',
+    index: 2,
+    label: 'кино',
+    yearsInterval: {
+      start: 1987,
+      last: 1991,
+    },
     details: [
       {
         year: 1987,
@@ -66,14 +78,18 @@ export const data = [
       {
         year: 1991,
         description:
-          'Семейка Аддамс»/The Addams family, США (реж. Барри Зонненфельд).',
+          '«Семейка Аддамс»/The Addams family, США (реж. Барри Зонненфельд).',
       },
     ],
   },
   {
-    id: 3,
-    category: 'литература',
-    yearsInterval: [1992, 1997],
+    id: '1fa08f16-3586-47f5-850c-072ef843a70e',
+    index: 3,
+    label: 'литература',
+    yearsInterval: {
+      start: 1992,
+      last: 1997,
+    },
     details: [
       {
         year: 1992,
@@ -98,9 +114,13 @@ export const data = [
     ],
   },
   {
-    id: 4,
-    category: '',
-    yearsInterval: [1999, 2004],
+    id: 'f23e4a7c-1659-473a-b379-a08065fca04c',
+    index: 4,
+    label: '',
+    yearsInterval: {
+      start: 1999,
+      last: 2004,
+    },
     details: [
       {
         year: 1999,
@@ -125,9 +145,13 @@ export const data = [
     ],
   },
   {
-    id: 5,
-    category: 'спорт',
-    yearsInterval: [2006, 2014],
+    id: '9a5aa773-03ed-40ba-b230-b04e743b11b2',
+    index: 5,
+    label: 'спорт',
+    yearsInterval: {
+      start: 2006,
+      last: 2014,
+    },
     details: [
       {
         year: 2005,
@@ -157,9 +181,13 @@ export const data = [
     ],
   },
   {
-    id: 6,
-    category: 'наука',
-    yearsInterval: [2015, 2022],
+    id: '78b02c5b-4785-4a03-8caa-9bd899cd6d9b',
+    index: 6,
+    label: 'наука',
+    yearsInterval: {
+      start: 2015,
+      last: 2022,
+    },
     details: [
       {
         year: 2015,

@@ -47,13 +47,11 @@ export default function rotatePoints({
     cursor: 'auto',
   });
 
-  if (prevPoint && prevPointNumber) {
-    hidePoint({
-      point: prevPoint,
-      pointNumber: prevPointNumber,
-    });
-    hidePointLabel(prevPoint.querySelector('.point-label') as HTMLElement);
-  }
+  hidePoint({
+    point: prevPoint,
+    pointNumber: prevPointNumber,
+  });
+  hidePointLabel(prevPoint.querySelector('.point-label') as HTMLElement);
 
   for (let i = 0; i < pointsQuantity; i++) {
     const point = points[i] as HTMLDivElement;

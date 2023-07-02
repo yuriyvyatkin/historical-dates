@@ -18,7 +18,6 @@ export default function MySwiper() {
   //   setcurrentPage(periodsSwiperRef.current?.activeIndex);
   // }, [periodsSwiperRef])
 
-
   const goPrev = () => {
     // periodsSwiperRef.current?.slideTo(5);
     // setCurrentPage(prevPage => prevPage && prevPage - 1);
@@ -35,10 +34,11 @@ export default function MySwiper() {
   };
 
   return (
-    <>
+    <div className="slider">
       <Swiper
-        direction="vertical"
-        effect="flip"
+        slidesPerView={3}
+        spaceBetween={30}
+        // effect="flip"
         pagination={pagination}
         navigation={{
           prevEl: '.custom-swiper-button-prev',
@@ -55,16 +55,15 @@ export default function MySwiper() {
           // swiper.effect = 'cube';
         }}
       >
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
-        <SwiperSlide></SwiperSlide>
+        <SwiperSlide>1</SwiperSlide>
+        <SwiperSlide>2</SwiperSlide>
+        <SwiperSlide>3</SwiperSlide>
+        <SwiperSlide>4</SwiperSlide>
+        <SwiperSlide>5</SwiperSlide>
+        <SwiperSlide>6</SwiperSlide>
       </Swiper>
       <button className="custom-swiper-button-prev" onClick={goPrev}>Prev</button>
       <button className="custom-swiper-button-next" onClick={goNext}>Next</button>
-      <span>{`0${currentPage}/06`}</span>
-    </>
+    </div>
   );
 }

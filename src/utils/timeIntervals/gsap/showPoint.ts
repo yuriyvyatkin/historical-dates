@@ -12,9 +12,6 @@ export default function showPoint({
   animate?: boolean;
 }) {
   if (animate) {
-    gsap.set(point, {
-      // zIndex: 3,
-    });
     gsap.to(point, {
       duration: duration,
       top: '-5%',

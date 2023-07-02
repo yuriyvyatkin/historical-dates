@@ -43,7 +43,7 @@
 
 .swiper {
   position: relative;
-  width: 600px;
+  width: 800px;
   height: 300px;
 }
 
@@ -59,3 +59,30 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.slider {
+  position: relative;
+}
+
+.custom-swiper-button-prev {
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+
+  left: 20px;
+  z-index: 1;
+
+  transform: translateY(-50%);
+}
+
+.custom-swiper-button-next {
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+
+  right: 20px;
+  z-index: 1;
+
+  transform: translateY(-50%);
+}
+

@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// import "swiper/css";
-// import "swiper/css/pagination";
+// import 'swiper/css/bundle';
 import './assets/styles/style.scss';
 import App from './App';
 
@@ -11,6 +10,6 @@ let root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-      <App />
+    <App />
   </React.StrictMode>
 );

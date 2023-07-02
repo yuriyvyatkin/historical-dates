@@ -1,8 +1,13 @@
 import React from 'react';
 
-function FractionPagination() {
+interface FractionPaginationProps {
+  currentPointIndex: number;
+  pointsLength: number;
+}
+
+function FractionPagination({currentPointIndex, pointsLength}: FractionPaginationProps) {
   return (
-    <span className="historical-dates__pagination-fraction">{`01/06`}</span>
+    <span className="historical-dates__pagination-fraction">{`0${currentPointIndex}/0${pointsLength}`}</span>
   );
 }
 

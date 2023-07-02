@@ -1,6 +1,6 @@
 import React from 'react';
 
-import HistoricalDates from "@/components/historicalDates/HistoricalDates";
+import HistoricalDates from "@/components/historicalDates";
 
 function App() {
 

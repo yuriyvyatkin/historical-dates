@@ -89,6 +89,7 @@
     & .point-number {
       display: inline-block;
       vertical-align: middle;
+      overflow: hidden;
 
       width: 6px;
       height: 6px;
@@ -98,17 +99,16 @@
       line-height: 50px;
 
       background-color: $dark-blue;
-
-      overflow: hidden;
     }
 
     & .point-label {
       position: absolute;
-      top: -6%;
+      top: -25px;
 
-      transform: rotate(-30deg);
+      width: 54px;
 
       opacity: 0;
+      transform: rotate(-30deg);
     }
   }
 
