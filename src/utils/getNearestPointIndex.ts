@@ -26,6 +26,9 @@ export default function getNearestPointIndex({
 }): number {
   const angle = getClockAngle(ax, ay, bx, by);
 
+  console.log(angle);
+  
+
   const inaccuracy = 30;
 
   if (angle - 30 <= inaccuracy) {
