@@ -169,12 +169,12 @@ function TimeIntervals({
         activePointNumberRef.current = null;
 
         setTimeout(() => {
-          const activePointLabel = prevPointRef.current?.querySelector(
+          const pointLabel = prevPointRef.current?.querySelector(
             '.point-label',
           ) as HTMLSpanElement;
 
           showPointLabel({
-            label: activePointLabel,
+            label: pointLabel,
           });
         }, rotationDuration * 1000);
       }

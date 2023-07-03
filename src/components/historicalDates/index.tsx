@@ -3,32 +3,37 @@ import TimeIntervals from '@/components/historicalDates/timeIntervals';
 import Title from '@/components/historicalDates/Title';
 import ArrowControls from '@/components/historicalDates/ArrowControls';
 import FractionPagination from '@/components/historicalDates/FractionPagination';
-import BottomControlsWrapper from './BottomControlsWrapper';
-import { data } from '@/data/data';
+import Footer from './Footer';
+import dataset from '@/assets/dataset';
 import capitalizeString from '@/utils/capitalizeString';
 import Slider from '@/components/historicalDates/Slider';
 
 function HistoricalDates() {
-  if (data.length < 2) {
+  if (dataset.length < 2) {
     return;
   }
   const [currentPointIndex, setCurrentPointIndex] = useState<number>(
-    data[0].index,
+    dataset[0].index,
   );
   const [startYear, setStartYear] = useState<number>(
-    data[0].yearsInterval.start,
+    dataset[0].yearsInterval.start,
   );
-  const [lastYear, setLastYear] = useState<number>(data[0].yearsInterval.last);
-  const [arrowControlsStatus, setArrowControlsStatus] = useState<null | 'left' | 'right'>(null);
-  const pointsData = data.map(({ id, index, label }) => ({
+  const [lastYear, setLastYear] = useState<number>(
+    dataset[0].yearsInterval.last,
+  );
+  const [arrowControlsStatus, setArrowControlsStatus] = useState<
+    null | 'left' | 'right'
+  >(null);
+  const pointsData = dataset.map(({ id, index, label }) => ({
     id,
     index,
     label: capitalizeString(label),
   }));
+  const sliderData = dataset[currentPointIndex - 1].details;
   const rotationDuration = 1;
 
   const updateYears = (newIndex: number) => {
-    const newYearsInterval = data[newIndex - 1].yearsInterval;
+    const newYearsInterval = dataset[newIndex - 1].yearsInterval;
 
     let castNumber = 1;
 
@@ -97,19 +102,30 @@ function HistoricalDates() {
           arrowControlsStatus={arrowControlsStatus}
           arrowControlsStatusSetter={setArrowControlsStatus}
         />
-        <BottomControlsWrapper>
+        <Footer>
           <FractionPagination
             currentPointIndex={currentPointIndex}
-            pointsLength={data.length}
+            pointsLength={dataset.length}
           />
           <ArrowControls
             controlClickHandler={handleControlClick}
-            pointsLength={data.length}
+            pointsLength={dataset.length}
             arrowControlsStatus={arrowControlsStatus}
             currentPointIndex={currentPointIndex}
           />
-        </BottomControlsWrapper>
-        {/* <Slider /> */}
+          <Slider sliderData={sliderData} />
+        </Footer>
+        {/* <FractionPagination
+          currentPointIndex={currentPointIndex}
+          pointsLength={dataset.length}
+        />
+        <ArrowControls
+          controlClickHandler={handleControlClick}
+          pointsLength={dataset.length}
+          arrowControlsStatus={arrowControlsStatus}
+          currentPointIndex={currentPointIndex}
+        />
+        <Slider sliderData={sliderData} /> */}
       </div>
     </>
   );
