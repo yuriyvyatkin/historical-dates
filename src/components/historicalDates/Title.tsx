@@ -2,7 +2,7 @@ import React from 'react';
 
 function Title() {
   return (
-    <div className="historical-dates__title">
+    <div className="title">
       Исторические <br /> даты
     </div>
   );

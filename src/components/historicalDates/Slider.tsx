@@ -1,69 +1,52 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import SwiperCore, { Pagination, Navigation } from 'swiper';
 
-export default function MySwiper() {
+interface slideData {
+  year: number;
+  description: string;
+}
+
+interface SliderProps {
+  sliderData: slideData[];
+}
+
+export default function Slider({ sliderData }: SliderProps) {
   const pagination = {
+    el: '.swiper__pagination',
     clickable: true,
     renderBullet: function (index: number, className: string) {
-      return `<span class="${className} ${className}-${index}'">${index + 1}</span>`;
-    }
-  };
-
-  const periodsSwiperRef = useRef<SwiperCore | null>(null);
-  const [currentPage, setCurrentPage] = useState<number | undefined>(1);
-
-  // useEffect(() => {
-  //   setcurrentPage(periodsSwiperRef.current?.activeIndex);
-  // }, [periodsSwiperRef])
-
-  const goPrev = () => {
-    // periodsSwiperRef.current?.slideTo(5);
-    // setCurrentPage(prevPage => prevPage && prevPage - 1);
-    // if (ref.current !== null && ref.current.current !== null) {
-    //   ref.current.current.slidePrev();
-    // }
-  };
-
-  const goNext = () => {
-    // setCurrentPage(prevPage => prevPage && prevPage + 1);
-    // if (ref.current !== null && ref.current.current !== null) {
-    //   ref.current.current.slideNext();
-    // }
+      return `<span class="${className}"></span>`;
+    },
   };
 
   return (
-    <div className="slider">
+    <div className="swiper__wrapper">
       <Swiper
         slidesPerView={3}
-        spaceBetween={30}
-        // effect="flip"
         pagination={pagination}
         navigation={{
-          prevEl: '.custom-swiper-button-prev',
-          nextEl: '.custom-swiper-button-next'
+          prevEl: '.swiper__button-prev',
+          nextEl: '.swiper__button-next',
         }}
         modules={[Pagination, Navigation]}
-        className="mySwiper"
-        onInit={(swiper) => {
-          periodsSwiperRef.current = swiper;
-          // swiper.effect = 'cube';
-        }}
-        onSlideChange={(swiper) => {
-          setCurrentPage(swiper.activeIndex + 1);
-          // swiper.effect = 'cube';
-        }}
+        className=".swiper"
       >
-        <SwiperSlide>1</SwiperSlide>
-        <SwiperSlide>2</SwiperSlide>
-        <SwiperSlide>3</SwiperSlide>
-        <SwiperSlide>4</SwiperSlide>
-        <SwiperSlide>5</SwiperSlide>
-        <SwiperSlide>6</SwiperSlide>
+        {sliderData.map((item: slideData) => {
+          return (
+            <SwiperSlide key={item.year}>
+              <div className="swiper-slide__title">{item.year}</div>
+              <div className="swiper-slide__description">
+                {item.description}
+              </div>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
-      <button className="custom-swiper-button-prev" onClick={goPrev}>Prev</button>
-      <button className="custom-swiper-button-next" onClick={goNext}>Next</button>
+      <button className="swiper__button-prev"></button>
+      <button className="swiper__button-next"></button>
+      <div className="swiper__pagination"></div>
     </div>
   );
 }
