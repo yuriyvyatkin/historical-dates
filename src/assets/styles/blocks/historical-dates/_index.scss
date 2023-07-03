@@ -1,7 +1,42 @@
-@import 'time-intervals';
-@import 'events';
-
 .historical-dates {
+  @mixin arrow-control-left {
+    border-radius: 50%;
+
+    background-image: url('@/assets/svg/desktop/arrow.svg');
+    background-repeat: no-repeat;
+    background-position: 50%;
+
+    cursor: pointer;
+  }
+  @mixin arrow-control-right {
+    @include arrow-control-left;
+
+    transform: rotate(180deg);
+  }
+  @mixin swiper-arrow-control {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+
+    width: 40px;
+    height: 40px;
+    border: none;
+
+    background-color: $white;
+    background-image: url('@/assets/svg/desktop/blue-arrow.svg');
+    box-shadow: 0 0 15px 0 $shadow;
+
+    &:disabled {
+      opacity: 0;
+      cursor: auto;
+    }
+  }
+
+  @import 'title';
+  @import 'time-intervals';
+  @import 'arrow-controls';
+  @import 'slider';
+
   @include pt-sans-regular-font;
 
   position: relative;
@@ -11,14 +46,14 @@
   align-items: center;
   overflow: hidden;
 
-  max-width: 1440px;
+  max-width: 1280px;
   min-height: 100vh;
   margin-right: auto;
   margin-left: auto;
-  border-right: 1px solid rgba($dark-blue, .1);
-  border-left: 1px solid rgba($dark-blue, .1);
+  border-right: 1px solid rgba($dark-blue-1, .1);
+  border-left: 1px solid rgba($dark-blue-1, .1);
 
-  color: $dark-blue;
+  color: $dark-blue-1;
   background-color: $gray;
 
   &::before {
@@ -29,7 +64,7 @@
     max-width: inherit;
     height: 2px;
 
-    background-color: rgba($dark-blue, .1);
+    background-color: rgba($dark-blue-1, .1);
   }
 
   &::after {
@@ -39,83 +74,24 @@
     width: 2px;
     height: 100%;
 
-    background-color: rgba($dark-blue, .1);
+    background-color: rgba($dark-blue-1, .1);
   }
 
-  &__title {
-    @include pt-sans-bold-font;
+  $ancestorSelector: &;
 
+  &__footer {
     position: absolute;
-    top: 15%;
-    left: 0;
-
-    padding-left: 80px;
-
-    font-size: 56px;
-    line-height: 120%;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-
-      width: 5px;
-      height: 100%;
-
-      background: linear-gradient(180deg, $violet-blue, $pink);
-    }
-  }
-
-  &__bottom-controls-wrapper {
-    position: absolute;
-    bottom: 20%;
+    bottom: 5%;
     left: 80px;
     display: flex;
     flex-direction: column;
 
-    & > *:not(:last-child) {
+    #{$ancestorSelector}__pagination-fraction {
       margin-bottom: 20px;
     }
-  }
-}
 
-.arrow-controls {
-  display: flex;
-
-  &__arrow-left {
-    width: 50px;
-    height: 50px;
-    margin-right: 20px;
-    border: 1px solid $dark-blue;
-    border-radius: 50%;
-
-    background-image: url('@/assets/svg/arrow.svg');
-    background-repeat: no-repeat;
-    background-position: 50%;
-
-    cursor: pointer;
-  }
-
-  &__arrow-right {
-    width: 50px;
-    height: 50px;
-    border: 1px solid $dark-blue;
-    border-radius: 50%;
-
-    background-image: url('@/assets/svg/arrow.svg');
-    background-repeat: no-repeat;
-    background-position: 50%;
-
-    transform: rotate(180deg);
-
-    cursor: pointer;
-  }
-
-  &__arrow-left_disabled,
-  &__arrow-right_disabled {
-    opacity: .5;
-
-    cursor: not-allowed;
+    & .arrow-controls {
+      margin-bottom: 56px;
+    }
   }
 }
