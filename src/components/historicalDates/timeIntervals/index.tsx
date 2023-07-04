@@ -71,12 +71,12 @@ function TimeIntervals({
 
     // находим центр окружности
     const circle = ancestorRef.current as HTMLSpanElement;
+    const circleCoords = circle?.getBoundingClientRect();
+    const circleRadius = circleCoords.width / 2;
     const circleX =
-      circle?.getBoundingClientRect().left + circle.offsetWidth / 2;
+    circleCoords.x + circleRadius + window.scrollX;
     const circleY =
-      circle?.getBoundingClientRect().top +
-      circle.offsetHeight / 2 +
-      window.scrollY;
+    circleCoords.y + circleRadius + window.scrollY;
 
     function handleMouseMove(e: MouseEvent) {
       const currentElement = e.target as HTMLSpanElement;
