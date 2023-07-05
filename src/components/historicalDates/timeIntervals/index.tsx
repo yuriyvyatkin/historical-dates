@@ -194,13 +194,16 @@ function TimeIntervals({
       activePointRef.current = ancestorRef.current?.querySelector(
         `.point${currentPointIndex}`,
       ) as HTMLDivElement;
+
       activePointNumberRef.current =
         activePointRef.current?.querySelector('.point-number');
+
       showPoint({
         point: activePointRef.current as HTMLDivElement,
         pointNumber: activePointNumberRef.current as HTMLSpanElement,
       });
       activePointNumberRef.current?.click();
+
       setTimeout(() => {
         setArrowControlsStatus(null);
       }, rotationDuration * 1000 + 300);

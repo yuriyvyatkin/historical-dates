@@ -10,11 +10,10 @@ interface slideData {
 
 interface SliderProps {
   sliderData: slideData[];
+  isMobileScreen: boolean;
 }
 
-export default function Slider({ sliderData }: SliderProps) {
-  const isMobileScreen = window.innerWidth <= 768;
-
+export default function Slider({ sliderData, isMobileScreen }: SliderProps) {
   return (
     <>
       <div className="swiper__wrapper">

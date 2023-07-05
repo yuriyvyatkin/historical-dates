@@ -50,6 +50,7 @@ function HistoricalDates({ dataset }: HistoricalDatesProps) {
   }));
   const sliderData = dataset[currentPointIndex - 1].details;
   const rotationDuration = 1;
+  const isMobileScreen = window.innerWidth <= 768;
 
   const updateYears = (newIndex: number) => {
     setUpdatingYears(true);
@@ -102,6 +103,7 @@ function HistoricalDates({ dataset }: HistoricalDatesProps) {
 
   const handleControlClick = (e: MouseEvent, castNumber: number) => {
     if (
+      updatingYears ||
       e.currentTarget.classList.contains(
         'arrow-controls__arrow-left_disabled',
       ) ||
@@ -110,8 +112,13 @@ function HistoricalDates({ dataset }: HistoricalDatesProps) {
       return;
     }
 
-    setArrowControlsStatus(castNumber < 0 ? 'left' : 'right');
-    setCurrentPointIndex((prevIndex) => prevIndex + castNumber);
+    if (isMobileScreen) {
+      updateYears(currentPointIndex + castNumber);
+      setCurrentPointIndex((prevIndex) => prevIndex + castNumber);
+    } else {
+      setArrowControlsStatus(castNumber < 0 ? 'left' : 'right');
+      setCurrentPointIndex((prevIndex) => prevIndex + castNumber);
+    }
   };
 
   return (
@@ -141,7 +148,7 @@ function HistoricalDates({ dataset }: HistoricalDatesProps) {
             currentPointIndex={currentPointIndex}
           />
         </ControlsWrapper>
-        <Slider sliderData={sliderData} />
+        <Slider sliderData={sliderData} isMobileScreen={isMobileScreen} />
         <BulletsPagination
           currentPointIndex={currentPointIndex}
           pointsLength={dataset.length}
