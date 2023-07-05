@@ -1,5 +1,5 @@
 .time-intervals {
-  position: relative;
+  position: absolute;
 
   width: 530px;
   height: 530px;
@@ -61,18 +61,10 @@
 
     & .years-interval {
       &__start-year {
-        height: 20px;
-
-        line-height: 20px;
-
         color: $violet-blue;
       }
 
       &__final-year {
-        height: 20px;
-
-        line-height: 20px;
-
         color: $pink;
       }
     }

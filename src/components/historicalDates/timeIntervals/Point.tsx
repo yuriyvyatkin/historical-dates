@@ -5,7 +5,7 @@ interface PointProps {
   label: string;
   prevPointRef?: RefObject<HTMLDivElement>;
   prevPointNumberRef?: RefObject<HTMLSpanElement>;
-  numberClickHandler: (id: number) => void;
+  bulletClickHandler: (id: number) => void;
 }
 
 function Point({
@@ -13,14 +13,14 @@ function Point({
   label,
   prevPointRef,
   prevPointNumberRef,
-  numberClickHandler: handleNumberClick,
+  bulletClickHandler: handleBulletClick,
 }: PointProps) {
   return (
     <div className={`time-intervals__point point${index}`} ref={prevPointRef}>
       <span
         className="point-number"
         ref={prevPointNumberRef}
-        onClick={() => handleNumberClick(index)}
+        onClick={() => handleBulletClick(index)}
       >
         {index}
       </span>

@@ -1,6 +1,8 @@
 .arrow-controls {
   display: flex;
 
+  width: fit-content;
+
   &__arrow-left {
     @include arrow-control-left;
 
@@ -21,7 +23,6 @@
   &__arrow-left_disabled,
   &__arrow-right_disabled {
     opacity: .5;
-
     cursor: not-allowed;
   }
 }

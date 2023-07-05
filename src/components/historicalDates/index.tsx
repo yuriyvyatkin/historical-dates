@@ -1,15 +1,33 @@
-import React, { useState, useEffect, MouseEvent } from 'react';
-import TimeIntervals from '@/components/historicalDates/timeIntervals';
-import Title from '@/components/historicalDates/Title';
+import React, { MouseEvent, useState } from 'react';
 import ArrowControls from '@/components/historicalDates/ArrowControls';
 import FractionPagination from '@/components/historicalDates/FractionPagination';
-import Footer from './Footer';
-import dataset from '@/assets/dataset';
-import capitalizeString from '@/utils/capitalizeString';
 import Slider from '@/components/historicalDates/Slider';
+import Title from '@/components/historicalDates/Title';
+import TimeIntervals from '@/components/historicalDates/timeIntervals';
+import capitalizeString from '@/utils/capitalizeString';
+import BulletsPagination from './BulletsPagination';
+import ControlsWrapper from './ControlsWrapper';
 
-function HistoricalDates() {
-  if (dataset.length < 2) {
+type Dataset = {
+  id: string;
+  index: number;
+  label: string;
+  yearsInterval: {
+    start: number;
+    last: number;
+  };
+  details: {
+    year: number;
+    description: string;
+  }[];
+}[];
+
+interface HistoricalDatesProps {
+  dataset: Dataset;
+}
+
+function HistoricalDates({ dataset }: HistoricalDatesProps) {
+  if (dataset.length < 2 || dataset.length > 6) {
     return;
   }
   const [currentPointIndex, setCurrentPointIndex] = useState<number>(
@@ -24,6 +42,7 @@ function HistoricalDates() {
   const [arrowControlsStatus, setArrowControlsStatus] = useState<
     null | 'left' | 'right'
   >(null);
+  const [updatingYears, setUpdatingYears] = useState<boolean>(false);
   const pointsData = dataset.map(({ id, index, label }) => ({
     id,
     index,
@@ -33,6 +52,8 @@ function HistoricalDates() {
   const rotationDuration = 1;
 
   const updateYears = (newIndex: number) => {
+    setUpdatingYears(true);
+
     const newYearsInterval = dataset[newIndex - 1].yearsInterval;
 
     let castNumber = 1;
@@ -64,11 +85,16 @@ function HistoricalDates() {
 
       if (startYearCounter === 0 && lastYearCounter === 0) {
         clearInterval(interval);
+        setUpdatingYears(false);
       }
     }, delay);
   };
 
-  const handleNumberClick = (index: number) => {
+  const handleBulletClick = (index: number) => {
+    if (updatingYears) {
+      return;
+    }
+
     updateYears(index);
 
     setCurrentPointIndex(index);
@@ -98,11 +124,12 @@ function HistoricalDates() {
           lastYear={lastYear}
           pointsData={pointsData}
           rotationDuration={rotationDuration}
-          numberClickHandler={handleNumberClick}
+          bulletClickHandler={handleBulletClick}
           arrowControlsStatus={arrowControlsStatus}
           arrowControlsStatusSetter={setArrowControlsStatus}
         />
-        <Footer>
+        <hr className="historical-dates__delimiter" />
+        <ControlsWrapper>
           <FractionPagination
             currentPointIndex={currentPointIndex}
             pointsLength={dataset.length}
@@ -113,19 +140,13 @@ function HistoricalDates() {
             arrowControlsStatus={arrowControlsStatus}
             currentPointIndex={currentPointIndex}
           />
-          <Slider sliderData={sliderData} />
-        </Footer>
-        {/* <FractionPagination
+        </ControlsWrapper>
+        <Slider sliderData={sliderData} />
+        <BulletsPagination
           currentPointIndex={currentPointIndex}
           pointsLength={dataset.length}
+          bulletClickHandler={handleBulletClick}
         />
-        <ArrowControls
-          controlClickHandler={handleControlClick}
-          pointsLength={dataset.length}
-          arrowControlsStatus={arrowControlsStatus}
-          currentPointIndex={currentPointIndex}
-        />
-        <Slider sliderData={sliderData} /> */}
       </div>
     </>
   );

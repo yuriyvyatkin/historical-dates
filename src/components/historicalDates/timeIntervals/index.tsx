@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import showPoint from '@/utils/timeIntervals/gsap/showPoint';
-import hidePoint from '@/utils/timeIntervals/gsap/hidePoint';
-import showPointLabel from '@/utils/timeIntervals/gsap/showPointLabel';
-import changePointZPosition from '@/utils/timeIntervals/gsap/changePointZPosition';
-import rotatePoints from '@/utils/timeIntervals/gsap/rotatePoints';
-import matrixToDegrees from '@/utils/timeIntervals/matrixToDegrees';
-import getNearestPointIndex from '@/utils/timeIntervals/getNearestPointIndex';
-import getActualPointIndex from '@/utils/timeIntervals/getActualPointIndex';
-import YearsInterval from './YearsInterval';
-import Point from './Point';
 import { ArrowControlsStatus } from '@/components/historicalDates/ArrowControls';
+import getActualPointIndex from '@/utils/timeIntervals/getActualPointIndex';
+import getNearestPointIndex from '@/utils/timeIntervals/getNearestPointIndex';
+import changePointZPosition from '@/utils/timeIntervals/gsap/changePointZPosition';
+import hidePoint from '@/utils/timeIntervals/gsap/hidePoint';
+import rotatePoints from '@/utils/timeIntervals/gsap/rotatePoints';
+import showPoint from '@/utils/timeIntervals/gsap/showPoint';
+import showPointLabel from '@/utils/timeIntervals/gsap/showPointLabel';
+import matrixToDegrees from '@/utils/timeIntervals/matrixToDegrees';
+import Point from './Point';
+import YearsInterval from './YearsInterval';
 
 interface PointData {
   id: string;
@@ -23,7 +23,7 @@ interface TimeIntervalsProps {
   lastYear: number;
   pointsData: PointData[];
   rotationDuration: number;
-  numberClickHandler: (id: number) => void;
+  bulletClickHandler: (id: number) => void;
   arrowControlsStatus: ArrowControlsStatus;
   arrowControlsStatusSetter: (status: ArrowControlsStatus) => void;
 }
@@ -35,7 +35,7 @@ function TimeIntervals({
   lastYear,
   pointsData,
   rotationDuration,
-  numberClickHandler: handleNumberClick,
+  bulletClickHandler: handleBulletClick,
   arrowControlsStatusSetter: setArrowControlsStatus,
 }: TimeIntervalsProps) {
   // инициализируем рефы для основных элементов
@@ -73,10 +73,8 @@ function TimeIntervals({
     const circle = ancestorRef.current as HTMLSpanElement;
     const circleCoords = circle?.getBoundingClientRect();
     const circleRadius = circleCoords.width / 2;
-    const circleX =
-    circleCoords.x + circleRadius + window.scrollX;
-    const circleY =
-    circleCoords.y + circleRadius + window.scrollY;
+    const circleX = circleCoords.x + circleRadius + window.scrollX;
+    const circleY = circleCoords.y + circleRadius + window.scrollY;
 
     function handleMouseMove(e: MouseEvent) {
       const currentElement = e.target as HTMLSpanElement;
@@ -120,7 +118,7 @@ function TimeIntervals({
       const actualNearestPointIndex = getActualPointIndex({
         index: nearestPointIndex,
         pointsQuantity: pointsQuantity,
-        firstPointNumber:  Number(prevPointNumberRef.current?.innerText),
+        firstPointNumber: Number(prevPointNumberRef.current?.innerText),
       });
 
       const actualPoint = ancestorRef.current?.querySelector(
@@ -218,7 +216,7 @@ function TimeIntervals({
             key={id}
             index={index}
             label={label}
-            numberClickHandler={() => handleNumberClick(index)}
+            bulletClickHandler={() => handleBulletClick(index)}
           />
         ))}
       </div>

@@ -1,4 +1,21 @@
 .historical-dates {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  max-width: 1280px;
+  min-height: 100vh;
+  margin-right: auto;
+  margin-left: auto;
+  border-right: 1px solid rgba($dark-blue-1, .1);
+  border-left: 1px solid rgba($dark-blue-1, .1);
+
+  color: $dark-blue-1;
+  background-color: $gray;
+
   @mixin arrow-control-left {
     border-radius: 50%;
 
@@ -39,23 +56,6 @@
 
   @include pt-sans-regular-font;
 
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-
-  max-width: 1280px;
-  min-height: 100vh;
-  margin-right: auto;
-  margin-left: auto;
-  border-right: 1px solid rgba($dark-blue-1, .1);
-  border-left: 1px solid rgba($dark-blue-1, .1);
-
-  color: $dark-blue-1;
-  background-color: $gray;
-
   &::before {
     content: '';
     position: absolute;
@@ -77,21 +77,57 @@
     background-color: rgba($dark-blue-1, .1);
   }
 
-  $ancestorSelector: &;
+  &__delimiter {
+    display: none;
 
-  &__footer {
+    width: 100%;
+    max-width: 280px;
+    height: 1px;
+    margin-top: 58px;
+    border: none;
+
+    background-color: $gray-2;
+  }
+
+  &__controls-wrapper {
     position: absolute;
-    bottom: 5%;
+    bottom: 25%;
     left: 80px;
     display: flex;
     flex-direction: column;
+  }
 
-    #{$ancestorSelector}__pagination-fraction {
-      margin-bottom: 20px;
+  &__fraction-pagination {
+    margin-bottom: 20px;
+  }
+
+  &__bullets-pagination {
+    position: absolute;
+    bottom: 6%;
+    left: 50%;
+    display: none;
+
+    transform: translateX(-50%);
+
+    &__bullet:not(:first-child) {
+      margin-left: 10px;
     }
 
-    & .arrow-controls {
-      margin-bottom: 56px;
+    &__bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+
+      background-color: $dark-blue-1;
+
+      opacity: .4;
+
+      &_active {
+        opacity: 1;
+      }
     }
   }
 }
+
+@import 'media/laptop';
+@import 'media/mobile';
