@@ -71,10 +71,18 @@ function TimeIntervals({
 
     // находим центр окружности
     const circle = ancestorRef.current as HTMLSpanElement;
-    const circleCoords = circle?.getBoundingClientRect();
-    const circleRadius = circleCoords.width / 2;
-    const circleX = circleCoords.x + circleRadius + window.scrollX;
-    const circleY = circleCoords.y + circleRadius + window.scrollY;
+    let circleCoords = circle?.getBoundingClientRect();
+    let circleRadius = circleCoords.width / 2;
+    let circleX = circleCoords.x + circleRadius + window.scrollX;
+    let circleY = circleCoords.y + circleRadius + window.scrollY;
+
+    // корректируем координаты центра окружности при изменении экрана
+    function handleWindowResize() {
+      circleCoords = circle?.getBoundingClientRect();
+      circleRadius = circleCoords.width / 2;
+      circleX = circleCoords.x + circleRadius + window.scrollX;
+      circleY = circleCoords.y + circleRadius + window.scrollY;
+    }
 
     function handleMouseMove(e: MouseEvent) {
       const currentElement = e.target as HTMLSpanElement;
@@ -182,10 +190,12 @@ function TimeIntervals({
       handleMouseMove(e),
     );
     ancestorRef.current?.addEventListener('click', handleClick);
+    window.addEventListener('resize', handleWindowResize);
 
     return () => {
       ancestorRef.current?.removeEventListener('mousemove', handleMouseMove);
       ancestorRef.current?.removeEventListener('click', handleClick);
+      window.removeEventListener('resize', handleWindowResize);
     };
   }, []);
 
