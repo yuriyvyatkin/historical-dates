@@ -25,8 +25,8 @@ export default function hidePoint({
   });
   gsap.to(pointNumber, {
     duration: duration,
-    width: 6,
-    height: 6,
+    width: 9,
+    height: 9,
     ease: 'power1.in',
   });
 }
